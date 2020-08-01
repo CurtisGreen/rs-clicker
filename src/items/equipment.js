@@ -1,7 +1,6 @@
 import { Item } from "./item.js";
 import { OBJECT_TYPES } from "../constants/constants.js";
-import { calcLevel } from "../utilities.js";
-import { getItemClass } from "./get-item-class.js";
+import { calcLevel, getItemClass } from "../utilities.js";
 
 export default class Equipment extends Item {
     // Attack bonuses
@@ -105,10 +104,6 @@ export default class Equipment extends Item {
     checkRequiredLevel() {
         let skill = this.skill.toLowerCase();
         let level = calcLevel(this.scene.characterData.skills[skill]);
-        if (level >= this.requiredLevel) {
-            return true;
-        } else {
-            return false;
-        }
+        return (level >= this.requiredLevel);
     }
 }
