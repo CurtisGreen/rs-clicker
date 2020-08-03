@@ -2,6 +2,7 @@ import { ClickableObject } from "../clickable-object.js";
 import { OBJECT_TYPES, CONSTANTS } from "../constants/constants.js";
 import { itemManifest } from "./item-manifest.js";
 import { getItemClass } from "../utilities.js";
+import { characterData } from "../cookie-io.js";
 
 export class Item extends ClickableObject {
     // Text data
@@ -96,17 +97,17 @@ export class Item extends ClickableObject {
     }
 
     async buy() {
-        if (this.scene.characterData.gold >= this.cost) {
+        if (characterData.getGold() >= this.cost) {
             console.log("Buying", this.name);
             let dashboard = this.scene.scene.get(CONSTANTS.SCENES.DASHBOARD);
 
             // Create new non-shop item
             let boughtItem = await getItemClass(this.constructor.name, dashboard);
             if (dashboard.inventory.obj.addToInventory(boughtItem)) {
-                this.scene.characterData.gold -= this.cost;
+                characterData.addGold(-1 * this.cost);
             }
         } else {
-            console.log("not enough mulah", this.scene.characterData.gold, this.cost);
+            console.log("not enough mulah", characterData.getGold(), this.cost);
         }
     }
 
@@ -194,7 +195,7 @@ export class Item extends ClickableObject {
     destroy(deleteCookies = true) {
         // Remove from inventory
         if (deleteCookies && this.index >= 0) {
-            this.scene.characterData.inventory[this.index] = "";
+            characterData.setInventory(this.index, "");
         }
 
         // Destroy objects

@@ -1,4 +1,5 @@
 // TODO: gray out items that are too expensive
+import { characterData } from "../cookie-io.js";
 import { calcLevel, getItemClass } from "../utilities.js";
 import { CONSTANTS, FONTS } from "../constants/constants.js";
 import { itemManifest } from "../items/item-manifest.js";
@@ -13,12 +14,8 @@ export class ShopScene extends Phaser.Scene {
         });
     }
 
-    init(data) {
-        // Carry along character data
-        this.characterData = data[0];
-        this.currentLevel = data[1];
+    init() {
         this.shopIcons = [];
-        this.currentGold = this.characterData.gold;
     }
 
     preload() {
@@ -52,7 +49,7 @@ export class ShopScene extends Phaser.Scene {
 
         // Add scrollable window for items
         this.scrollWindow = new ScrollWindow("shop");
-        this.scene.add("scroll-window", this.scrollWindow, true, this.characterData);
+        this.scene.add("scroll-window", this.scrollWindow, true);
 
         // Display the shop (weapons displayed by default)
         this.loadShop(CONSTANTS.ITEM_TYPES.WEAPON);
@@ -64,7 +61,7 @@ export class ShopScene extends Phaser.Scene {
             .setInteractive()
             .on("pointerup", () => {
                 // Pass in the current level to know which level to return to upon exiting the shop.
-                this.scene.start(this.currentLevel, this.characterData);
+                this.scene.start(this.currentLevel);
                 this.scene.remove(this.scrollWindow.name);
                 console.log("Going back to", this.currentLevel);
             });
@@ -130,19 +127,19 @@ export class ShopScene extends Phaser.Scene {
 
     // Update the shop to display current gold
     update() {
-        if (this.currentGold != this.characterData.gold) {
+        if (this.currentGold != characterData.getGold()) {
             this.audio.playSfx("purchase");
-            this.displayGold(this.characterData.gold);
-            this.currentGold = this.characterData.gold;
+            this.displayGold(characterData.getGold());
+            this.currentGold = characterData.getGold();
         }
     }
 
     loadShop(type) {
         // Displays cash stack
-        this.displayGold(this.characterData.gold);
+        this.displayGold(characterData.getGold());
 
         // Loads items into shopItems and displays items on screen
-        this.loadItems(type, this.characterData.skills);
+        this.loadItems(type);
     }
 
     // Outputs the gold text in RS format: 1m = 1000k, 10m = green text, 1b = 1000m
@@ -178,7 +175,7 @@ export class ShopScene extends Phaser.Scene {
 
         // Pick text color and style based on # of coins
         let color = "white";
-        let goldText = this.characterData.gold;
+        let goldText = characterData.getGold();
         if (gold > 99999 && gold < 10000000) {
             goldText = gold / 1000 + "k";
         } else if (gold > 10000000) {
@@ -193,8 +190,8 @@ export class ShopScene extends Phaser.Scene {
         });
     }
 
-    // Load items based on the character's levels
-    loadItems(itemType, characterSkills) {
+    // Load items
+    loadItems(itemType) {
         console.log("Loading " + itemType);
         this.loadingText.visible = true;
 
