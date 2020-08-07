@@ -107,8 +107,8 @@ export default class Equipment extends Item {
         if (skill == "melee") {
             skill = "attack";
         }
-        
+
         let level = calcLevel(characterData.getSkillXp(skill));
-        return (level >= this.requiredLevel);
+        return level >= this.requiredLevel;
     }
 }

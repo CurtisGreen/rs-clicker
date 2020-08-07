@@ -147,7 +147,7 @@ export class Skills {
         if (this.scene.scene.isActive()) {
             let totalLevel = 0;
             const skills = characterData.getSkills();
-            
+
             for (let skill in skills) {
                 let level = calcLevel(skills[skill]);
                 this.skillText[skill].text = level;

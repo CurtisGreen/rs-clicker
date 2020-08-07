@@ -148,7 +148,7 @@ export class LevelScene extends Phaser.Scene {
     enemyKilled(name) {
         // Update kill quest score
         if (characterData.getEnemiesKilled(this.currentLevel, name) < this.killQuest) {
-            characterData.incEnemiesKilled(this.currentLevel, name)
+            characterData.incEnemiesKilled(this.currentLevel, name);
 
             let questCompleted = true;
             this.targets.forEach((enemy, index) => {
@@ -166,8 +166,7 @@ export class LevelScene extends Phaser.Scene {
 
                     if (Math.random() < 0.5) {
                         this.audioScene.playSfx("quest-complete-1");
-                    }
-                    else {
+                    } else {
                         this.audioScene.playSfx("quest-complete-2");
                     }
                 }

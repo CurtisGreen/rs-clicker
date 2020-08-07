@@ -5,7 +5,6 @@ import { targetManifest } from "../targets/target-manifest.js";
 import { setItemClass } from "../utilities.js";
 
 export class LoadScene extends Phaser.Scene {
-
     // Loading bar info
     fullyLoaded = false;
     numItemsLoaded = 0;

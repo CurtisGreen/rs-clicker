@@ -47,14 +47,18 @@ export class WorldMapScene extends Phaser.Scene {
             },
             {
                 text: "Lumbridge",
-                condition: characterData.getQuestCompleted(CONSTANTS.SCENES.TUTORIAL_ISLAND),
+                condition: characterData.getQuestCompleted(
+                    CONSTANTS.SCENES.TUTORIAL_ISLAND
+                ),
                 x: MAP.LUMBRIDGE.X,
                 y: MAP.LUMBRIDGE.Y,
                 key: CONSTANTS.SCENES.LUMBRIDGE,
             },
             {
                 text: "Lumbridge\nForest",
-                condition: characterData.getQuestCompleted(CONSTANTS.SCENES.TUTORIAL_ISLAND),
+                condition: characterData.getQuestCompleted(
+                    CONSTANTS.SCENES.TUTORIAL_ISLAND
+                ),
                 x: MAP.LUMBRIDGE_TREES.X,
                 y: MAP.LUMBRIDGE_TREES.Y,
                 key: CONSTANTS.SCENES.LUMBRIDGE_TREES,

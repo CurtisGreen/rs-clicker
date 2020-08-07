@@ -276,7 +276,7 @@ export class Enemy extends Target {
         let xpIncrease = xpModifier * hitValue;
         if (Object.entries(this.equipment.obj.equipment.WEAPON).length) {
             const skill = this.equipment.obj.equipment.WEAPON.skill;
-            
+
             // Todo: organize so switch isn't needed
             switch (this.equipment.obj.equipment.WEAPON.skill) {
                 case EQUIPMENT.WEAPON_TYPES.MAGIC:

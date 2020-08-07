@@ -13,6 +13,6 @@ export class Tree extends Resource {
 
     isClickable() {
         let curWeapon = this.scene.dashboard.equipment.obj.equipment.WEAPON;
-        return (curWeapon.item == "Axe");
+        return curWeapon.item == "Axe";
     }
 }
