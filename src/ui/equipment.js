@@ -31,7 +31,6 @@ export class Equipment {
 
         for (let i in playerEquipment) {
             if (Object.keys(playerEquipment[i]).length) {
-                console.log(playerEquipment[i]);
                 let newEquipment = await getItemClass(
                     playerEquipment[i],
                     this.scene

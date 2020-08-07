@@ -35,6 +35,8 @@ export class AudioScene extends Phaser.Scene {
             "purchase",
             "src/assets/audio/sfx/GrandExchangeOfferComplete.mp3"
         );
+        this.load.audio("quest-complete-1", "src/assets/audio/sfx/QuestCompleted1.ogg");
+        this.load.audio("quest-complete-2", "src/assets/audio/sfx/QuestCompleted2.ogg");
     }
 
     create() {
@@ -72,8 +74,9 @@ export class AudioScene extends Phaser.Scene {
 
     // Pause BGM while playing SFX
     playSfx(audioName) {
+        console.log("playing", audioName);
         this.currentSong.pause();
-        if (this.sfx != undefined && this.sfx.isPlaying) {
+        if (this.sfx?.isPlaying) {
             this.sfx.stop();
             this.currentSong.pause();
         }

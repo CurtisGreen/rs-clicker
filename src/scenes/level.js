@@ -17,15 +17,16 @@ export class LevelScene extends Phaser.Scene {
         path: "",
     };
 
-    // targets: enemy, tree, etc.
+    // Targets: enemy, tree, etc.
     targets = [];
     targetMetaData = [];
     currentTargetIndex = 0;
     levelType = "";
 
-    // Dashboard for inventory, skills, etc.
+    // Scenes
     dashboard;
     stats;
+    audioScene;
 
     // For enemy levels
     killQuest = 0;
@@ -68,8 +69,8 @@ export class LevelScene extends Phaser.Scene {
         characterData.setCurrentLevel(this.currentLevel);
 
         // Play music
-        let audioScene = this.scene.get(CONSTANTS.SCENES.AUDIO);
-        audioScene.playBgm(this.audio.bgm);
+        this.audioScene = this.scene.get(CONSTANTS.SCENES.AUDIO);
+        this.audioScene.playBgm(this.audio.bgm);
 
         // Launch dashboard, stats, and chat scenes in parallel
         this.scene.run(CONSTANTS.SCENES.DASHBOARD);
@@ -150,18 +151,25 @@ export class LevelScene extends Phaser.Scene {
             characterData.incEnemiesKilled(this.currentLevel, name)
 
             let questCompleted = true;
-            this.targetMetaData.forEach((enemy, index) => {
+            this.targets.forEach((enemy, index) => {
                 // Check for quest completion
                 if (
-                    characterData.getEnemiesKilled(this.currentLevel, enemy) <
+                    characterData.getEnemiesKilled(this.currentLevel, enemy.varName) <
                     this.killQuest
                 ) {
                     questCompleted = false;
                 }
                 // Set as complete if all passed on last index
-                else if (questCompleted && index == this.targetMetaData.length - 1) {
-                    characterData.setQuestCompleted(this.currentLevel);
+                else if (questCompleted && index == this.targets.length - 1) {
                     console.log("Quest complete!");
+                    characterData.setQuestCompleted(this.currentLevel);
+
+                    if (Math.random() < 0.5) {
+                        this.audioScene.playSfx("quest-complete-1");
+                    }
+                    else {
+                        this.audioScene.playSfx("quest-complete-2");
+                    }
                 }
             });
         }

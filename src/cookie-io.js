@@ -21,7 +21,7 @@ class CharacterData {
             this.characterData.gold += amount;
         }
         else {
-            console.log("Warning: tried to set gold to negative number, amount:", 
+            console.log("Error: tried to set gold to negative number, amount:", 
                 amount, "current gold:", this.characterData.gold);
         }
     }
@@ -87,17 +87,16 @@ class CharacterData {
             return this.characterData.equipment[slot];
         }
         else {
-            console.log("Warning: invalid equipment slot", slot);
+            console.log("Error: invalid equipment slot", slot);
             return "";
         }
     }
     setEquipment(slot, itemName) {
-        console.log(slot, itemName);
         if (this.characterData.equipment[slot] != undefined) {
             this.characterData.equipment[slot] = itemName;
         }
         else {
-            console.log("Warning: invalid equipment slot", slot, itemName);
+            console.log("Error: invalid equipment slot", slot, itemName);
         }
     }
 
@@ -131,7 +130,7 @@ class CharacterData {
             this.characterData.skills[skill] += xp;
         }
         else {
-            console.log("Warning: setting invalid skill", skill, xp);
+            console.log("Error: setting invalid skill", skill, xp);
         }
     }
     getSkillXp(skill) {
@@ -139,7 +138,7 @@ class CharacterData {
             return this.characterData.skills[skill];
         }
         else {
-            console.log("Warning: getting invalid skill", skill);
+            console.log("Error: getting invalid skill", skill);
             return 0;
         }
     }
@@ -159,13 +158,25 @@ class CharacterData {
     }
 
     incEnemiesKilled(scene, enemy) {
-        if (this.checkScene(scene)) {
+        if (this.checkEnemy(scene, enemy)) {
             this.characterData.levels[scene].enemiesKilled[enemy]++;
         }
     }
     getEnemiesKilled(scene, enemy) {
-        if (this.checkScene(scene)) {
+        if (this.checkEnemy(scene, enemy)) {
             return this.characterData.levels[scene].enemiesKilled[enemy];
+        }
+    }
+
+    checkEnemy(scene, enemy) {
+        if (this.checkScene(scene)) {
+            if (this.characterData.levels[scene].enemiesKilled[enemy] != undefined) {
+                return true;
+            }
+            else {
+                console.log("Error: getting/setting invalid enemy", enemy);
+                return false;
+            }
         }
     }
 
@@ -174,7 +185,7 @@ class CharacterData {
             return true;
         }
         else {
-            console.log("Warning: getting/setting invalid scene", scene);
+            console.log("Error: getting/setting invalid scene", scene);
             return false;
         }
     }

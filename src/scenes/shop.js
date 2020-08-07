@@ -8,14 +8,30 @@ import { autoclickerManifest } from "../auto-clickers/auto-clicker-manifest.js";
 import { ScrollWindow } from "../ui/scroll-window.js";
 
 export class ShopScene extends Phaser.Scene {
+    // Scenes
+    audio;
+    scrollWindow;
+
+    background;
+    loadingText;
+    exitButton;
+
+    shopIcons = [];
+    currentGold = 0;
+
+    weaponsButton;
+    weaponsText;
+    toolsButton;
+    toolsText;
+    consumablesButton;
+    consumablesText;
+    clanButton;
+    clanText;
+
     constructor() {
         super({
             key: CONSTANTS.SCENES.SHOP,
         });
-    }
-
-    init() {
-        this.shopIcons = [];
     }
 
     preload() {
@@ -61,9 +77,9 @@ export class ShopScene extends Phaser.Scene {
             .setInteractive()
             .on("pointerup", () => {
                 // Pass in the current level to know which level to return to upon exiting the shop.
-                this.scene.start(this.currentLevel);
+                this.scene.start(characterData.getCurrentLevel());
                 this.scene.remove(this.scrollWindow.name);
-                console.log("Going back to", this.currentLevel);
+                console.log("Going back to", characterData.getCurrentLevel());
             });
 
         // Buttons to switch between weapons/tools/consumables/clan members (autoclickers)
@@ -129,21 +145,23 @@ export class ShopScene extends Phaser.Scene {
     update() {
         if (this.currentGold != characterData.getGold()) {
             this.audio.playSfx("purchase");
-            this.displayGold(characterData.getGold());
-            this.currentGold = characterData.getGold();
+            this.displayGold();
         }
     }
 
     loadShop(type) {
         // Displays cash stack
-        this.displayGold(characterData.getGold());
+        this.displayGold();
 
         // Loads items into shopItems and displays items on screen
         this.loadItems(type);
     }
 
     // Outputs the gold text in RS format: 1m = 1000k, 10m = green text, 1b = 1000m
-    displayGold(gold) {
+    displayGold() {
+        let gold = characterData.getGold();
+        this.currentGold = gold;
+
         if (this.goldImage != undefined) {
             this.goldImage.destroy();
             this.goldText.destroy();
@@ -175,7 +193,7 @@ export class ShopScene extends Phaser.Scene {
 
         // Pick text color and style based on # of coins
         let color = "white";
-        let goldText = characterData.getGold();
+        let goldText = gold;
         if (gold > 99999 && gold < 10000000) {
             goldText = gold / 1000 + "k";
         } else if (gold > 10000000) {

@@ -142,6 +142,7 @@ export class Item extends ClickableObject {
     }
 
     setNumItems(num) {
+        console.log("setNumItems(", num, ")")
         if (num <= 0) {
             this.destroy();
         } else {
@@ -167,8 +168,12 @@ export class Item extends ClickableObject {
                         fillColor = "green";
                         break;
                 }
-                this.numItemsText.text = visualNum;
-                this.numItemsText.setFill(fillColor);
+
+                // Can't change text while in different scene (like the shop)
+                if (this.scene.scene.isActive()) {
+                    this.numItemsText.text = visualNum;
+                    this.numItemsText.setFill(fillColor);
+                }
 
                 // Make visible if item is also visible
                 if (num <= 1) {

@@ -104,6 +104,10 @@ export default class Equipment extends Item {
     // TODO: be able to have multiple different required levels for different skills
     checkRequiredLevel() {
         let skill = this.skill.toLowerCase();
+        if (skill == "melee") {
+            skill = "attack";
+        }
+        
         let level = calcLevel(characterData.getSkillXp(skill));
         return (level >= this.requiredLevel);
     }
