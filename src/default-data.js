@@ -1,10 +1,8 @@
 export const defaultData = {
-    //hasCookies: false,
+    //hasCookies: false, // todo: maybe use this for tutorial?
     name: "You",
     gold: 0,
-    //characterClass: "",
     currentLevel: "TUTORIAL_ISLAND",
-    //totalEnemiesKilled: 0,
     timesClicked: 0,
     damageByClicking: 0,
     damageByAutoClick: 0,

@@ -142,7 +142,6 @@ export class Item extends ClickableObject {
     }
 
     setNumItems(num) {
-        console.log("setNumItems(", num, ")")
         if (num <= 0) {
             this.destroy();
         } else {

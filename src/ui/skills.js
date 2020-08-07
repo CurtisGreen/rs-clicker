@@ -208,7 +208,7 @@ export class Skills {
 
                 // Get cumulative XP
                 let sum = 0;
-                for (let [curSkill, xp] in characterData.getSkills()) {
+                for (let [curSkill, xp] of Object.entries(characterData.getSkills())) {
                     sum += xp;
                 }
                 this.hoverXpText.text = "Total XP: " + sum.toLocaleString();
@@ -274,17 +274,13 @@ export class Skills {
         if (this.statsScene == undefined) {
             this.statsScene = this.scene.scene.get(CONSTANTS.SCENES.STATS);
         }
-// <<<<<<< HEAD
+
         if (isVisible) {
             this.statsScene.show(false);
         } else {
             // Put correct stats per scene
             this.statsScene.showStats();
         }
-
-// =======
-//         this.statsScene.show(!isVisible);
-// >>>>>>> master
         for (let obj in this.skillInfo) {
             this.skillInfo[obj].visible = isVisible;
         }
