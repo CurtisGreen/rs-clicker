@@ -1,5 +1,6 @@
 import { defaultData } from "./default-data.js";
 import { CONSTANTS } from "./constants/constants.js";
+import { calcLevel } from "./utilities.js";
 
 function getDefaultData() {
     // Reset data (deep copy)
@@ -8,6 +9,11 @@ function getDefaultData() {
 
 class CharacterData {
     characterData = getDefaultData();
+    scene;
+
+    init(scene) {
+        this.scene = scene;
+    }
 
     getName() {
         return this.characterData.name;
@@ -128,7 +134,14 @@ class CharacterData {
 
     addSkillXp(skill, xp) {
         if (this.characterData.skills[skill] != undefined) {
+            const prevLevel = calcLevel(this.characterData.skills[skill]);
             this.characterData.skills[skill] += xp;
+            const curLevel = calcLevel(this.characterData.skills[skill]);
+
+            if (curLevel > prevLevel) {
+                const audioScene = this.scene.scene.get(CONSTANTS.SCENES.AUDIO);
+                audioScene.playSfx(skill + "-level-up");
+            }
         } else {
             console.log("Error: setting invalid skill", skill, xp);
         }

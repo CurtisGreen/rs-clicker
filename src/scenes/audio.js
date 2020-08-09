@@ -37,6 +37,14 @@ export class AudioScene extends Phaser.Scene {
         );
         this.load.audio("quest-complete-1", "src/assets/audio/sfx/QuestCompleted1.ogg");
         this.load.audio("quest-complete-2", "src/assets/audio/sfx/QuestCompleted2.ogg");
+
+        const skills = ["Attack", "Fletching", "Magic", "Mining", "Prayer", "Ranged", "Woodcutting"];
+        for (let skill of skills) {
+            this.load.audio(
+                skill.toLowerCase() + "-level-up", 
+                "src/assets/audio/sfx/" + skill + "LevelUp.ogg"
+            );
+        }
     }
 
     create() {
