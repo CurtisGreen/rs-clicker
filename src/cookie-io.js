@@ -124,11 +124,15 @@ class CharacterData {
     getVolume(typeIndex) {
         if (typeIndex < this.characterData.audio.length) {
             return this.characterData.audio[typeIndex];
+        } else {
+            console.log("Error: getVolume() index out of range:", typeIndex);
         }
     }
     setVolume(typeIndex, volume) {
         if (typeIndex < this.characterData.audio.length) {
             this.characterData.audio[typeIndex] = volume;
+        } else {
+            console.log("Error: setVolume() index out of range:", typeIndex);
         }
     }
 
@@ -232,7 +236,9 @@ class CharacterData {
     }
 
     reset() {
+        console.log("before reset:", this.characterData.audio);
         this.characterData = getDefaultData();
+        console.log("after:", this.characterData.audio);
     }
 }
 
