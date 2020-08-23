@@ -7,6 +7,8 @@ export class ChatScene extends Phaser.Scene {
     shopChatWindow;
     scrollWindow;
 
+    playerNameText;
+
     constructor() {
         super({ key: CONSTANTS.SCENES.CHAT });
     }
@@ -18,25 +20,27 @@ export class ChatScene extends Phaser.Scene {
 
     create() {
         // Setup scroll window
-        this.scrollWindow = new ScrollWindow("chat");
-        this.scene.add("scroll-window", this.scrollWindow, true);
-        let welcomeText = this.add.text(
-            10,
-            444,
-            "Welcome to RS Clicker",
-            FONTS.ITEM_HEADER
-        );
-        let startArray = [welcomeText];
+        if (this.scrollWindow == undefined) {
+            this.scrollWindow = new ScrollWindow("chat");
+            this.scene.add("scroll-window", this.scrollWindow, true);
+            let welcomeText = this.add.text(
+                10,
+                444,
+                "Welcome to RS Clicker",
+                FONTS.ITEM_HEADER
+            );
+            let startArray = [welcomeText];
 
-        this.scrollWindow.addObjects({
-            x: 0,
-            y: 345,
-            width: 495,
-            height: 113,
-            numColumns: 1,
-            padding: 0,
-            objects: startArray,
-        });
+            this.scrollWindow.addObjects({
+                x: -20,
+                y: 345,
+                width: 515,
+                height: 113,
+                numColumns: 1,
+                padding: 0,
+                objects: startArray,
+            });
+        }
 
         // Chat window for examining items
         this.chatWindow = this.add
@@ -65,19 +69,16 @@ export class ChatScene extends Phaser.Scene {
     writeObjects(...objects) {
         if (objects.length == 1) {
             this.scrollWindow.addObject(objects[0]);
-            this.scrollWindow.refresh();
         }
         else {
             let row = new TextRow(this.scrollWindow, 0, 0, []);
             objects.forEach(obj => {
                 row.add(obj);
             });
-            console.log(row);
-            row.setX(0);
-            console.log("test");
             this.scrollWindow.addObject(row);
-            this.scrollWindow.refresh();
         }
+        this.scrollWindow.refresh();
+        this.scrollWindow.scrollToBottom();
     }
 
     writeEnemyInfo(enemy) {
@@ -140,8 +141,16 @@ export class ChatScene extends Phaser.Scene {
     }
 
     writeEquipmentInfo(equipment) {
-        this.writeStrings(0, {text: "Sells for: " + equipment.cost, format: FONTS.ITEM_STATS});
-        this.writeStrings(0, {text: "Required Level: " + equipment.requiredLevel, format: FONTS.ITEM_HEADER});
+        this.writeStrings(
+            90, 
+            {text: "Sells for:", format: FONTS.ITEM_HEADER},
+            {text: equipment.cost + "gp", format: FONTS.ITEM_STATS}
+        );
+        this.writeStrings(
+            90, 
+            {text: "Required Level:", format: FONTS.ITEM_HEADER},
+            {text: equipment.requiredLevel + "gp", format: FONTS.ITEM_STATS}
+        );
         this.writeStrings(
             55, 
             {text: "Accuracy Bonuses:", format: FONTS.ITEM_HEADER},
@@ -189,16 +198,24 @@ export class ChatScene extends Phaser.Scene {
     show(isVisible = true) {
         this.scrollWindow.setVisible(isVisible);
         this.playerNameText.visible = isVisible;
-        this.chatWindow.visible = isVisible;
-        this.shopChatWindow.visible = isVisible;
+
+        if (!isVisible) {
+            this.chatWindow.visible = isVisible;
+            this.shopChatWindow.visible = isVisible;
+        }
     }
 
     // Show object info in chat window
     showObjectInfo(isVisible, object = false, isShop = false) {
         if (object && isVisible) {
+            this.show();
+
             // Write name & description
-            this.writeStrings(0, {text: object.name, format: FONTS.ITEM_HEADER});
-            this.writeStrings(0, {text: object.examineText, format: FONTS.ITEM_STATS});
+            this.writeStrings(
+                90, 
+                {text: object.name, format: FONTS.ITEM_HEADER},
+                {text: object.examineText, format: FONTS.ITEM_STATS}
+            );
 
             // Load bigger window on shop scene
             if (isShop) {
@@ -213,7 +230,11 @@ export class ChatScene extends Phaser.Scene {
                     this.writeEquipmentInfo(object);
                     break;
                 case OBJECT_TYPES.ITEM:
-                    this.writeStrings(0, {text: "Sells for: " + object.cost, format: FONTS.ITEM_STATS});
+                    this.writeStrings(
+                        90, 
+                        {text: "Sells for:", format: FONTS.ITEM_HEADER},
+                        {text: object.cost + "gp", format: FONTS.ITEM_STATS}
+                    );
                     break;
                 case OBJECT_TYPES.ENEMY:
                     this.writeEnemyInfo(object);

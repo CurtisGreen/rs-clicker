@@ -13,7 +13,7 @@ export class ScrollWindow extends Phaser.Scene {
 
     listHeight = 0;
     listDelta = 30;
-    curDelta = 0;
+    curDirection = 0;
 
     // Images
     scrollHeader;
@@ -130,26 +130,23 @@ export class ScrollWindow extends Phaser.Scene {
 
                 // Move scroll button & objects
                 this.input.on("wheel", (pointer, gameObjects, deltaX, deltaY, deltaZ) => {
-                    this.scroll(deltaY, remainingScrollBarDist, remainingListDist);
+                    this.curDirection = deltaY > 0 ? 1 : -1;
+                    this.scroll();
                 });
 
                 // Setup timer to check if scrollheader/footer is being held
                 this.timer = this.time.addEvent({
                     delay: 100, // ms
                     callback: () => {
-                        this.scroll(
-                            this.curDelta,
-                            remainingScrollBarDist,
-                            remainingListDist
-                        );
+                        this.scroll();
                     },
                     loop: true,
                     paused: true,
                 });
 
                 this.scrollHeader.on("pointerdown", () => {
-                    this.scroll(-1, remainingScrollBarDist, remainingListDist);
-                    this.curDelta = -1;
+                    this.curDirection = -1;
+                    this.scroll();
                     this.timer.paused = false;
                 });
                 this.scrollHeader.on("pointerup", () => {
@@ -158,8 +155,8 @@ export class ScrollWindow extends Phaser.Scene {
                 });
 
                 this.scrollFooter.on("pointerdown", () => {
-                    this.scroll(1, remainingScrollBarDist, remainingListDist);
-                    this.curDelta = 1;
+                    this.curDirection = 1;
+                    this.scroll();
                     this.timer.paused = false;
                 });
                 this.scrollFooter.on("pointerup", () => {
@@ -171,11 +168,8 @@ export class ScrollWindow extends Phaser.Scene {
                 this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
                     let drag = dragY - this.scrollButton.y;
                     if (Math.abs(drag) > 5) {
-                        this.scroll(
-                            dragY - this.scrollButton.y,
-                            remainingScrollBarDist,
-                            remainingListDist
-                        );
+                        this.curDirection = drag > 0 ? 1 : -1;
+                        this.scroll();
                     }
                 });
             }
@@ -190,13 +184,15 @@ export class ScrollWindow extends Phaser.Scene {
         }
     }
 
-    scroll(deltaY, remainingScrollBarDist, remainingListDist) {
+    scroll(deltaY = 0) {
         if (this.listHeight > this.data.height) {
-            if (deltaY > 0) {
-                deltaY = this.listDelta;
-            } else if (deltaY < 0) {
-                deltaY = this.listDelta * -1;
+            // Setup default scroll distance
+            if (deltaY == 0) {
+                deltaY = this.listDelta * this.curDirection;
             }
+
+            let remainingListDist = this.listHeight - this.data.height;
+            let remainingScrollBarDist = this.scrollBackground.displayHeight - this.scrollButton.displayHeight;
 
             // Scale scroll bar delta
             let scrollBarDelta = deltaY * (remainingScrollBarDist / remainingListDist);
@@ -208,6 +204,7 @@ export class ScrollWindow extends Phaser.Scene {
             let lowerBound = Math.floor(
                 this.scrollButton.y + scrollButtonHeight + scrollBarDelta
             );
+
             if (
                 (scrollBarDelta < 0 && upperBound >= scrollHeaderHeight) ||
                 (scrollBarDelta > 0 && lowerBound <= this.scrollFooter.y)
@@ -220,6 +217,11 @@ export class ScrollWindow extends Phaser.Scene {
             }
         }
     }
+
+    scrollToBottom() {
+        let remainingListDist = this.listHeight - this.data.height;
+        this.scroll(remainingListDist);
+    }    
 
     setVisible(isVisible) {
         this.data.objects.forEach((obj) => {
