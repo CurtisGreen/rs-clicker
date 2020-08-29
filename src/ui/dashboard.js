@@ -280,7 +280,15 @@ export class DashboardScene extends Phaser.Scene {
             });
 
         // Add scrollable window for clan members
-        this.clan.scrollWindow = new ScrollWindow("clans");
+        this.clan.scrollWindow = new ScrollWindow({
+            name: "clans",
+            x: 535,
+            y: 280,
+            width: 175,
+            height: 140,
+            numColumns: 1,
+            padding: 10,
+        });
         this.scene.add("scroll-window", this.clan.scrollWindow, true);
 
         // Clear out and reinstatiate clan members

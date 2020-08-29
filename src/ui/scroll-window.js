@@ -1,7 +1,7 @@
 export class ScrollWindow extends Phaser.Scene {
     name = "";
     // Input data
-    data = {
+    format = {
         x: 0,
         y: 0,
         width: 0,
@@ -21,26 +21,31 @@ export class ScrollWindow extends Phaser.Scene {
     scrollBackground;
     scrollButton;
 
-    constructor(name) {
-        super("scroll-window" + name);
+    constructor(data) {
+        super("scroll-window" + data.name);
 
-        this.name = "scroll-window" + name;
+        this.name = "scroll-window" + data.name;
+        this.format.x = data.x;
+        this.format.y = data.y;
+        this.format.width = data.width;
+        this.format.height = data.height;
+        this.format.numColumns = data.numColumns;
+        this.format.padding = data.padding;
     }
 
     addObject(object) {
-        this.data.objects.push(object);
+        this.format.objects.push(object);
     }
 
     // Objects passed in need the setX, setY, setVisible functions available
     addObjects(data) {
-        if (data.objects.length > 0) {
-            this.refresh(data);
-        }
+        data.forEach((obj) => {
+            this.format.objects.push(obj);
+        });
     }
 
-    refresh(data = this.data) {
-        this.data = data;
-
+    refresh() {
+        let data = this.format;
         // Destroy previous scroll bar if it exists
         if (this.scrollHeader != undefined) {
             this.input.removeListener("wheel");
@@ -185,14 +190,15 @@ export class ScrollWindow extends Phaser.Scene {
     }
 
     scroll(deltaY = 0) {
-        if (this.listHeight > this.data.height) {
+        if (this.listHeight > this.format.height) {
             // Setup default scroll distance
             if (deltaY == 0) {
                 deltaY = this.listDelta * this.curDirection;
             }
 
-            let remainingListDist = this.listHeight - this.data.height;
-            let remainingScrollBarDist = this.scrollBackground.displayHeight - this.scrollButton.displayHeight;
+            let remainingListDist = this.listHeight - this.format.height;
+            let remainingScrollBarDist =
+                this.scrollBackground.displayHeight - this.scrollButton.displayHeight;
 
             // Scale scroll bar delta
             let scrollBarDelta = deltaY * (remainingScrollBarDist / remainingListDist);
@@ -211,20 +217,36 @@ export class ScrollWindow extends Phaser.Scene {
             ) {
                 // Scroll objects
                 this.scrollButton.y += scrollBarDelta;
-                this.data.objects.forEach((object) => {
+                this.format.objects.forEach((object) => {
                     object.setY(object.y - deltaY);
                 });
             }
         }
     }
 
+    clearObjects() {
+        this.format.objects = [];
+    }
+
+    clear() {
+        this.format = {
+            x: 0,
+            y: 0,
+            width: 0,
+            height: 0,
+            numColumns: 0,
+            padding: 0,
+            objects: [],
+        };
+    }
+
     scrollToBottom() {
-        let remainingListDist = this.listHeight - this.data.height;
+        let remainingListDist = this.listHeight - this.format.height;
         this.scroll(remainingListDist);
-    }    
+    }
 
     setVisible(isVisible) {
-        this.data.objects.forEach((obj) => {
+        this.format.objects.forEach((obj) => {
             obj.setVisible(isVisible);
         });
         if (this.scrollButton != undefined) {
