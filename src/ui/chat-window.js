@@ -1,15 +1,22 @@
 import { OBJECT_TYPES, CONSTANTS, FONTS } from "../constants/constants.js";
 import { ScrollWindow } from "./scroll-window.js";
 import { TextRow } from "./text-row.js";
+import { Button } from "./Button.js";
 
 export class ChatScene extends Phaser.Scene {
     chatWindow;
     shopChatWindow;
     scrollWindow;
 
+    chatButton;
+    chatButtonText;
+    reportButton;
+    reportButtonText;
+
     playerNameText;
 
     col1 = 0;
+    visible = false;
 
     constructor() {
         super({ key: CONSTANTS.SCENES.CHAT });
@@ -55,6 +62,21 @@ export class ChatScene extends Phaser.Scene {
             .image(0, 338, "shop-chat-window")
             .setOrigin(0, 0)
             .setDepth(0);
+
+        // Add chat toggle button
+        this.chatButtonText = this.add.text(20, 483, "Log", FONTS.HOTBAR);
+        this.chatButton = new Button(this, 5, 480, 58, 22);
+        this.chatButton.on("pointerup", () => {
+            this.chatWindow.visible = !this.visible;
+            this.show(!this.visible);
+        });
+
+        // Add bug report button
+        this.reportButtonText = this.add.text(420, 483, "Report a bug", FONTS.OPTIONS_MENU);
+        this.reportButton = new Button(this, 402, 480, 115, 22);
+        this.reportButton.on("pointerup", () => {
+            window.open("https://github.com/CurtisGreen/rs-clicker/issues", "_blank");
+        });
 
         // General info
         this.playerNameText = this.add.text(10, 459, "You", FONTS.ITEM_HEADER);
@@ -197,6 +219,7 @@ export class ChatScene extends Phaser.Scene {
     }
 
     show(isVisible = true) {
+        this.visible = isVisible;
         this.scrollWindow.setVisible(isVisible);
         this.playerNameText.visible = isVisible;
 

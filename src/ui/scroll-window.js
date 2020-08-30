@@ -239,6 +239,7 @@ export class ScrollWindow extends Phaser.Scene {
     }
 
     setVisible(isVisible = true) {
+        this.visible = isVisible;
         this.format.objects.forEach((obj) => {
             obj.setVisible(isVisible);
         });
