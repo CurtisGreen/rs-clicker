@@ -25,6 +25,7 @@ export class ChatScene extends Phaser.Scene {
     preload() {
         this.load.image("chat-window", "src/assets/ui/ChatWindow.png");
         this.load.image("shop-chat-window", "src/assets/ui/ShopChatWindow.png");
+        this.load.image("chat-button", "src/assets/ui/buttons/ChatButton.png");
     }
 
     create() {
@@ -62,11 +63,15 @@ export class ChatScene extends Phaser.Scene {
             .image(0, 338, "shop-chat-window")
             .setOrigin(0, 0)
             .setDepth(0);
+        this.chatButtonImage = this.add
+            .image(32, 490, "chat-button")
+            .setDepth(0);
 
         // Add chat toggle button
         this.chatButtonText = this.add.text(20, 483, "Log", FONTS.HOTBAR);
-        this.chatButton = new Button(this, 5, 480, 58, 22);
+        this.chatButton = new Button(this, 5, 480, 58, 22, {depth: 1});
         this.chatButton.on("pointerup", () => {
+
             this.chatWindow.visible = !this.visible;
             this.show(!this.visible);
         });
@@ -219,6 +224,7 @@ export class ChatScene extends Phaser.Scene {
     }
 
     show(isVisible = true) {
+        this.chatButtonImage.visible = isVisible;
         this.visible = isVisible;
         this.scrollWindow.setVisible(isVisible);
         this.playerNameText.visible = isVisible;
