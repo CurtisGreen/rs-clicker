@@ -289,7 +289,8 @@ export class DashboardScene extends Phaser.Scene {
             numColumns: 1,
             padding: 10,
         });
-        this.scene.add("scroll-window", this.clan.scrollWindow, true);
+        this.scene.add(this.clan.scrollWindow.name, this.clan.scrollWindow, true);
+        this.clan.scrollWindow.refresh();
 
         // Clear out and reinstatiate clan members
         if (Object.entries(this.clan.obj).length) {

@@ -34,10 +34,10 @@ export class ChatScene extends Phaser.Scene {
                 numColumns: 1,
                 padding: 0,
             });
-            this.scene.add("scroll-window", this.scrollWindow, true);
-            let welcomeText = this.add.text(
-                10,
-                444,
+            this.scene.add(this.scrollWindow.name, this.scrollWindow, true);
+            let welcomeText = this.scrollWindow.add.text(
+                0,
+                0,
                 "Welcome to RS Clicker",
                 FONTS.ITEM_HEADER
             );
@@ -62,6 +62,7 @@ export class ChatScene extends Phaser.Scene {
         this.show(false);
     }
 
+    // Create a row of text on the scroll window
     writeStrings(...textObjs) {
         let textLine = [];
         let curX = 0;
@@ -84,8 +85,6 @@ export class ChatScene extends Phaser.Scene {
             });
             this.scrollWindow.addObject(row);
         }
-        this.scrollWindow.refresh();
-        this.scrollWindow.scrollToBottom();
     }
 
     writeEnemyInfo(enemy) {
@@ -108,10 +107,10 @@ export class ChatScene extends Phaser.Scene {
             { x: 0, text: "Accuracy Bonuses:", format: FONTS.ITEM_HEADER },
             { x: x[0], text: "Melee", format: FONTS.ITEM_STATS },
             { x: x[1], text: enemy.attackBonus, format: FONTS.ITEM_STATS },
-            { x: x[2], text: "", format: {} },
-            { x: x[3], text: "", format: {} },
-            { x: x[4], text: "", format: {} },
-            { x: x[5], text: "", format: {} },
+            { x: x[2], text: "", format: FONTS.ITEM_STATS },
+            { x: x[3], text: "", format: FONTS.ITEM_STATS },
+            { x: x[4], text: "", format: FONTS.ITEM_STATS },
+            { x: x[5], text: "", format: FONTS.ITEM_STATS },
             { x: x[6], text: "Mag", format: FONTS.ITEM_STATS },
             { x: x[7], text: enemy.magicBonus, format: FONTS.ITEM_STATS },
             { x: x[8], text: "Rng", format: FONTS.ITEM_STATS },
@@ -121,10 +120,10 @@ export class ChatScene extends Phaser.Scene {
             { x: 0, text: "Damage Bonuses:", format: FONTS.ITEM_HEADER },
             { x: x[0], text: "Melee", format: FONTS.ITEM_STATS },
             { x: x[1], text: enemy.strengthBonus, format: FONTS.ITEM_STATS },
-            { x: x[2], text: "", format: {} },
-            { x: x[3], text: "", format: {} },
-            { x: x[4], text: "", format: {} },
-            { x: x[5], text: "", format: {} },
+            { x: x[2], text: "", format: FONTS.ITEM_STATS },
+            { x: x[3], text: "", format: FONTS.ITEM_STATS },
+            { x: x[4], text: "", format: FONTS.ITEM_STATS },
+            { x: x[5], text: "", format: FONTS.ITEM_STATS },
             { x: x[6], text: "Mag", format: FONTS.ITEM_STATS },
             { x: x[7], text: enemy.magicStrengthBonus, format: FONTS.ITEM_STATS },
             { x: x[8], text: "Rng", format: FONTS.ITEM_STATS },
@@ -146,55 +145,54 @@ export class ChatScene extends Phaser.Scene {
     }
 
     writeEquipmentInfo(equipment) {
-        const col1 = this.col1;
-        const colN = 50;
+        const x = [0, this.col1, 40, 30, 45, 30, 50, 30, 45, 25, 45];
 
         this.writeStrings(
-            { x: 0, text: "Sells for:", format: FONTS.ITEM_HEADER },
-            { x: col1, text: equipment.cost + "gp", format: FONTS.ITEM_STATS }
+            { x: x[0], text: "Sells for:", format: FONTS.ITEM_HEADER },
+            { x: x[1], text: equipment.cost + "gp", format: FONTS.ITEM_STATS }
         );
         this.writeStrings(
-            { x: 0, text: "Required Level:", format: FONTS.ITEM_HEADER },
-            { x: col1, text: equipment.requiredLevel, format: FONTS.ITEM_STATS }
+            { x: x[0], text: "Required Level:", format: FONTS.ITEM_HEADER },
+            { x: x[1], text: equipment.requiredLevel, format: FONTS.ITEM_STATS }
         );
         this.writeStrings(
-            { x: 0, text: "Accuracy Bonuses:", format: FONTS.ITEM_HEADER },
-            { x: col1, text: "Stab", format: FONTS.ITEM_STATS },
-            { x: colN, text: equipment.stabBonus, format: FONTS.ITEM_STATS },
-            { x: colN, text: "Slash", format: FONTS.ITEM_STATS },
-            { x: colN, text: equipment.slashBonus, format: FONTS.ITEM_STATS },
-            { x: colN, text: "Crush", format: FONTS.ITEM_STATS },
-            { x: colN, text: equipment.crushBonus, format: FONTS.ITEM_STATS },
-            { x: colN, text: "Magic", format: FONTS.ITEM_STATS },
-            { x: colN, text: equipment.magicBonus, format: FONTS.ITEM_STATS },
-            { x: colN, text: "Ranged", format: FONTS.ITEM_STATS },
-            { x: colN, text: equipment.rangedBonus, format: FONTS.ITEM_STATS }
+            { x: x[0], text: "Accuracy Bonuses:", format: FONTS.ITEM_HEADER },
+            { x: x[1], text: "Stab", format: FONTS.ITEM_STATS },
+            { x: x[2], text: equipment.stabBonus, format: FONTS.ITEM_STATS },
+            { x: x[3], text: "Slash", format: FONTS.ITEM_STATS },
+            { x: x[4], text: equipment.slashBonus, format: FONTS.ITEM_STATS },
+            { x: x[5], text: "Crush", format: FONTS.ITEM_STATS },
+            { x: x[6], text: equipment.crushBonus, format: FONTS.ITEM_STATS },
+            { x: x[7], text: "Mag", format: FONTS.ITEM_STATS },
+            { x: x[8], text: equipment.magicBonus, format: FONTS.ITEM_STATS },
+            { x: x[9], text: "Rng", format: FONTS.ITEM_STATS },
+            { x: x[10], text: equipment.rangedBonus, format: FONTS.ITEM_STATS }
         );
         this.writeStrings(
-            { x: 0, text: "Defense Bonuses:", format: FONTS.ITEM_HEADER },
-            { x: col1, text: "Stab", format: FONTS.ITEM_STATS },
-            { x: colN, text: equipment.stabDefenseBonus, format: FONTS.ITEM_STATS },
-            { x: colN, text: "Slash", format: FONTS.ITEM_STATS },
-            { x: colN, text: equipment.slashDefenseBonus, format: FONTS.ITEM_STATS },
-            { x: colN, text: "Crush", format: FONTS.ITEM_STATS },
-            { x: colN, text: equipment.crushDefenseBonus, format: FONTS.ITEM_STATS },
-            { x: colN, text: "Magic", format: FONTS.ITEM_STATS },
-            { x: colN, text: equipment.magicDefenseBonus, format: FONTS.ITEM_STATS },
-            { x: colN, text: "Ranged", format: FONTS.ITEM_STATS },
-            { x: colN, text: equipment.rangedDefenseBonus, format: FONTS.ITEM_STATS }
+            { x: x[0], text: "Defense Bonuses:", format: FONTS.ITEM_HEADER },
+            { x: x[1], text: "Stab", format: FONTS.ITEM_STATS },
+            { x: x[2], text: equipment.stabDefenseBonus, format: FONTS.ITEM_STATS },
+            { x: x[3], text: "Slash", format: FONTS.ITEM_STATS },
+            { x: x[4], text: equipment.slashDefenseBonus, format: FONTS.ITEM_STATS },
+            { x: x[5], text: "Crush", format: FONTS.ITEM_STATS },
+            { x: x[6], text: equipment.crushDefenseBonus, format: FONTS.ITEM_STATS },
+            { x: x[7], text: "Mag", format: FONTS.ITEM_STATS },
+            { x: x[8], text: equipment.magicDefenseBonus, format: FONTS.ITEM_STATS },
+            { x: x[9], text: "Rng", format: FONTS.ITEM_STATS },
+            { x: x[10], text: equipment.rangedDefenseBonus, format: FONTS.ITEM_STATS }
         );
         this.writeStrings(
-            { x: 0, text: "Damage Bonuses:", format: FONTS.ITEM_HEADER },
-            { x: col1, text: "Melee", format: FONTS.ITEM_STATS },
-            { x: colN, text: equipment.strengthBonus, format: FONTS.ITEM_STATS },
-            { x: colN, text: "Prayer", format: FONTS.ITEM_STATS },
-            { x: colN, text: equipment.prayerBonus, format: FONTS.ITEM_STATS },
-            { x: colN, text: "", format: {} },
-            { x: colN, text: "", format: {} },
-            { x: colN, text: "Magic", format: FONTS.ITEM_STATS },
-            { x: colN, text: equipment.magicStrengthBonus, format: FONTS.ITEM_STATS },
-            { x: colN, text: "Ranged", format: FONTS.ITEM_STATS },
-            { x: colN, text: equipment.rangedStrengthBonus, format: FONTS.ITEM_STATS }
+            { x: x[0], text: "Damage Bonuses:", format: FONTS.ITEM_HEADER },
+            { x: x[1], text: "Melee", format: FONTS.ITEM_STATS },
+            { x: x[2], text: equipment.strengthBonus, format: FONTS.ITEM_STATS },
+            { x: x[3], text: "Prayer", format: FONTS.ITEM_STATS },
+            { x: x[4], text: equipment.prayerBonus, format: FONTS.ITEM_STATS },
+            { x: x[5], text: "", format: FONTS.ITEM_STATS },
+            { x: x[6], text: "", format: FONTS.ITEM_STATS },
+            { x: x[7], text: "Mag", format: FONTS.ITEM_STATS },
+            { x: x[8], text: equipment.magicStrengthBonus, format: FONTS.ITEM_STATS },
+            { x: x[9], text: "Rng", format: FONTS.ITEM_STATS },
+            { x: x[10], text: equipment.rangedStrengthBonus, format: FONTS.ITEM_STATS }
         );
     }
 
@@ -213,6 +211,14 @@ export class ChatScene extends Phaser.Scene {
         if (object && isVisible) {
             this.show();
 
+            // Load bigger window and clear text on shop scene
+            if (isShop) {
+                this.shopChatWindow.visible = true;
+                this.scrollWindow.clearObjects();
+            } else {
+                this.chatWindow.visible = true;
+            }
+
             const col1 = this.col1;
 
             // Write name & description
@@ -220,14 +226,6 @@ export class ChatScene extends Phaser.Scene {
                 { x: 0, text: object.name, format: FONTS.ITEM_HEADER },
                 { x: col1, text: object.examineText, format: FONTS.ITEM_STATS }
             );
-
-            // Load bigger window on shop scene
-            if (isShop) {
-                this.shopChatWindow.visible = true;
-            } else {
-                this.chatWindow.visible = true;
-            }
-
             // Show different things for different types of objects
             switch (object.objectType) {
                 case OBJECT_TYPES.EQUIPMENT:
@@ -248,7 +246,12 @@ export class ChatScene extends Phaser.Scene {
             }
 
             // Add blank line
-            this.writeStrings({ x: 0, text: "", format: {} });
+            this.writeStrings({ x: 0, text: "", format: FONTS.ITEM_STATS });
+            this.scrollWindow.refresh();
+            this.scrollWindow.scrollToBottom();
+            if (isShop) {
+                this.scrollWindow.showScrollBar(false);
+            }
         } else {
             this.show(false);
         }

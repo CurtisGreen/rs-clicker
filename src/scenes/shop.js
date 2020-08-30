@@ -51,7 +51,6 @@ export class ShopScene extends Phaser.Scene {
     }
 
     create() {
-        console.log("shop create");
         // Add background
         this.background = this.add
             .image(0, 0, "shop-interface")
@@ -66,14 +65,14 @@ export class ShopScene extends Phaser.Scene {
         // Add scrollable window for items
         this.scrollWindow = new ScrollWindow({
             name: "shop",
-            x: 20,
+            x: 0,
             y: 100,
             width: 450,
             height: 214,
             numColumns: 3,
             padding: 35,
         });
-        this.scene.add("scroll-window", this.scrollWindow, true);
+        this.scene.add(this.scrollWindow.name, this.scrollWindow, true);
 
         // Display the shop (weapons displayed by default)
         this.loadShop(CONSTANTS.ITEM_TYPES.WEAPON);
@@ -246,7 +245,7 @@ export class ShopScene extends Phaser.Scene {
                     let newItem = await getItemClass(item, this.scrollWindow);
 
                     // Create sprite
-                    newItem.createShopSprite(0, 0);
+                    newItem.createShopSprite(20, 100);
                     newItem.setVisible(false);
                     this.shopIcons.push(newItem);
                 }
