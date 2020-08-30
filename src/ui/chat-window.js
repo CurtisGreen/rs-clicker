@@ -29,6 +29,7 @@ export class ChatScene extends Phaser.Scene {
     }
 
     create() {
+        console.log("create");
         this.col1 = 120;
 
         // Setup scroll window
@@ -63,28 +64,28 @@ export class ChatScene extends Phaser.Scene {
             .image(0, 338, "shop-chat-window")
             .setOrigin(0, 0)
             .setDepth(0);
-        this.chatButtonImage = this.add
-            .image(32, 490, "chat-button")
-            .setDepth(0);
+        this.chatButtonImage = this.add.image(32, 490, "chat-button").setDepth(0);
+        this.playerNameText = this.add.text(10, 459, "You", FONTS.ITEM_HEADER);
 
         // Add chat toggle button
         this.chatButtonText = this.add.text(20, 483, "Log", FONTS.HOTBAR);
-        this.chatButton = new Button(this, 5, 480, 58, 22, {depth: 1});
+        this.chatButton = new Button(this, 5, 480, 58, 22, { depth: 1 });
         this.chatButton.on("pointerup", () => {
-
             this.chatWindow.visible = !this.visible;
             this.show(!this.visible);
         });
 
         // Add bug report button
-        this.reportButtonText = this.add.text(420, 483, "Report a bug", FONTS.OPTIONS_MENU);
+        this.reportButtonText = this.add.text(
+            420,
+            483,
+            "Report a bug",
+            FONTS.OPTIONS_MENU
+        );
         this.reportButton = new Button(this, 402, 480, 115, 22);
         this.reportButton.on("pointerup", () => {
             window.open("https://github.com/CurtisGreen/rs-clicker/issues", "_blank");
         });
-
-        // General info
-        this.playerNameText = this.add.text(10, 459, "You", FONTS.ITEM_HEADER);
 
         this.show(false);
     }
@@ -224,15 +225,21 @@ export class ChatScene extends Phaser.Scene {
     }
 
     show(isVisible = true) {
-        this.chatButtonImage.visible = isVisible;
         this.visible = isVisible;
         this.scrollWindow.setVisible(isVisible);
         this.playerNameText.visible = isVisible;
+        this.chatButtonImage.visible = isVisible;
 
         if (!isVisible) {
             this.chatWindow.visible = isVisible;
             this.shopChatWindow.visible = isVisible;
         }
+    }
+
+    hideButtons() {
+        this.chatButtonImage.visible = false;
+        this.chatButtonText.visible = false;
+        this.reportButtonText.visible = false;
     }
 
     // Show object info in chat window
@@ -244,6 +251,7 @@ export class ChatScene extends Phaser.Scene {
             if (isShop) {
                 this.shopChatWindow.visible = true;
                 this.scrollWindow.clearObjects();
+                this.chatButtonImage.visible = false;
             } else {
                 this.chatWindow.visible = true;
             }

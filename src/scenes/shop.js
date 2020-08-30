@@ -51,6 +51,13 @@ export class ShopScene extends Phaser.Scene {
     }
 
     create() {
+        // Run chat scene but hide the bottom buttons after create
+        this.scene.run(CONSTANTS.SCENES.CHAT);
+        let chatScene = this.scene.get(CONSTANTS.SCENES.CHAT);
+        chatScene.events.once("create", () => {
+            chatScene.hideButtons();
+        });
+
         // Add background
         this.background = this.add
             .image(0, 0, "shop-interface")

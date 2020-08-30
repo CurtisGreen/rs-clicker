@@ -95,9 +95,13 @@ export class ScrollWindow extends Phaser.Scene {
 
         // Set default scaling based on height input, may change below based on list height
         this.scrollBar.displayHeight =
-            data.height - this.scrollHeader.displayHeight - this.scrollFooter.displayHeight;
+            data.height -
+            this.scrollHeader.displayHeight -
+            this.scrollFooter.displayHeight;
         this.scrollBackground.displayHeight =
-            data.height - this.scrollHeader.displayHeight - this.scrollFooter.displayHeight;
+            data.height -
+            this.scrollHeader.displayHeight -
+            this.scrollFooter.displayHeight;
 
         // Create scroll bar if needed
         if (data.objects.length > 0) {
@@ -227,7 +231,7 @@ export class ScrollWindow extends Phaser.Scene {
     }
 
     clearObjects() {
-        this.format.objects.forEach(obj => {
+        this.format.objects.forEach((obj) => {
             obj.destroy();
         });
         this.format.objects = [];

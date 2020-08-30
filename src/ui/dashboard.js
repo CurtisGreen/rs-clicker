@@ -300,7 +300,7 @@ export class DashboardScene extends Phaser.Scene {
         this.showClanChat(false);
 
         // Scene destructor
-        this.events.on("shutdown", () => {
+        this.events.once("shutdown", () => {
             this.scene.remove(this.clan.scrollWindow.name);
         });
     }
