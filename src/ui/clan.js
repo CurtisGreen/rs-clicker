@@ -78,7 +78,6 @@ export class Clan {
         // Hide if clan tab is not selected
         let show = this.scene.currentPanel == CONSTANTS.PANEL.CLAN;
         member.setVisible(show);
-        console.log("show?", show);
 
         this.scrollWindow.addObject(member);
     }
